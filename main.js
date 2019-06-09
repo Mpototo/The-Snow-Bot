@@ -28,10 +28,34 @@ client.on("message", async message => {
             .setThumbnail(`https://cdn.discordapp.com/icons/578325838991196188/59984a6199ffa1bf27536ee5937918c8.png?size=2048`)
             .addField(`**Prefixo**`, `Meu prefixo é **${block}s!${block}**`, true)
             .addField(`**Latencia**`, `A Latencia é **${block}${m.createdTimestamp - message.createdTimestamp}${block}**ms\n E a latencia da API é **${block}${Math.round(client.ping)}${block}**ms`, true)
-            
             .setFooter(`🌟The Snow Team🌟™`)
-            m.edit(`${message.author}`,embed)
+            m.edit(`${message.author}`,embed);
         }
+
+        if(message.content.startsWith(prefix + "ban")) {
+            if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(`❌ Você não tem permissão para usar esse comando!`)
+            if(args.length === 0) return message.reply("📃 Utilize s!ban <@usuário> <motivo>!");
+            let banMember = message.mentions.users.first() || message.guild.users.get(args[0]);
+            if(!banMember) return message.reply(`🔍 Não foi possível encontrar este usuário! ${message.author}`);
+            let banReason = args.join(" ").slice(22) || args.slice(1).join(" ");
+            if(!banReason){
+                banReason = "A razão não foi informada!"
+            }
+
+            try {
+                message.guild.member(banMember).ban(banReason);
+                const embed = new Discord.RichEmbed()
+                .setTitle(`**Banido!**`)
+                .setColor(`#3179ed`)
+                .setDescription(`O usuário ${banMember} foi **banido** com sucesso pelo **motivo**: ${banReason}`)
+                .setThumbnail('https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/153/party-popper_1f389.png')
+                .setFooter(`🌟The Snow Team🌟™`)
+                message.channel.send(`**${banMember} banido!!**`, {embed});
+            } catch (error) {
+                message.reply(`${error}`);
+            }
+        }
+
 });
 
 client.login(`${config.token}`)
