@@ -32,6 +32,44 @@ client.on("message", async message => {
             m.edit(`${message.author}`,embed);
         }
 
+        if (message.content.startsWith(prefix + "avatar")) {
+            let aTaged = message.mentions.users.first();
+            const embed = new Discord.RichEmbed()
+            .setTitle(`**Avatar!**`)
+            .setColor(`#3179ed`)
+            .setDescription(`Clique [aqui](${aTaged.displayAvatarURL}) para abrir a imagem!`)
+            .setImage(`${aTaged.displayAvatarURL}`)
+            .setFooter(`🌟The Snow Team🌟™`)
+            message.channel.send(`📸 Aqui esta o avatar`, {embed})
+        }
+        
+        if (message.content.startsWith(prefix + `anuncio`)) {
+            let text = args.join(" ")
+            message.guild.members.forEach(member => {
+              if (member.id != client.user.id && !member.user.bot) member.send(text);
+            });
+            message.channel.send(`Anuncio mandado para **${message.guild.memberCount}** membros, ${message.author}`)
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if(message.content.startsWith(prefix + "ban")) {
             if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(`❌ Você não tem permissão para usar esse comando!`)
             if(args.length === 0) return message.reply("📃 Utilize s!ban <@usuário> <motivo>!");
@@ -56,6 +94,10 @@ client.on("message", async message => {
             }
         }
 
-});
+
+
+
+
+    });
 
 client.login(`${config.token}`)
